@@ -1,7 +1,6 @@
 /**
  *  OWON Occupancy driver for Hubitat
  *
- *  https://community.hubitat.com/t/alpha-tuya-zigbee-multi-sensor-4-in-1/92441
  *
  *	Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *	in compliance with the License. You may obtain a copy of the License at:
