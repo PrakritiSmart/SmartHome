@@ -25,7 +25,7 @@ import hubitat.device.HubAction
 import hubitat.device.Protocol
 
 metadata {
-    definition (name: "Occupancy Sensor", namespace: "prakitismart", author: "Prakiti Smart", importUrl: "https://raw.githubusercontent.com/PrakitiSmart/SmartHome/main/Hubitat/Drivers/Occupancy%20Sensor.groovy", singleThreaded: true ) {
+    definition (name: "Occupancy Sensor", namespace: "prakitismart", author: "Prakiti Smart", importUrl: "https://raw.githubusercontent.com/PrakitiSmart/SmartHome/main/Hubitat/Drivers%20Code/Occupancy%20Sensor.groovy", singleThreaded: true ) {
         capability "Sensor"
         capability "MotionSensor"
         capability "PowerSource"
