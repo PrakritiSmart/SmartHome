@@ -27,7 +27,7 @@ def version() { "1.0.0" }
 def timeStamp() { "2023/04/05 9:36 AM" }
 
 metadata {
-    definition (name: "Occupancy Sensor", namespace: "prakitismart", author: "Prakiti Smart", importUrl: "https://raw.githubusercontent.com/PrakitiSmart/SmartHome/main/Hubitat/Drivers%20Code/prakritismart-zigbee-multigang-switch.groovy", singleThreaded: true ) {
+    definition (name: "Prakriti Smart ZigBee Wall Switch Multi-Gang", namespace: "prakritismart", author: "Prakriti Smart", importUrl: "https://raw.githubusercontent.com/prakritiSmart/SmartHome/main/Hubitat/Drivers%20Code/prakritismart-zigbee-multigang-switch.groovy", singleThreaded: true ) {
         capability "Initialize"
         capability "Actuator"
         capability "Configuration"
