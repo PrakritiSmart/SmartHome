@@ -1,5 +1,5 @@
 /**
- *  Zemismart ZigBee Wall Switch Multi-Gang
+ *  Prakriti Smart ZigBee Wall Switch Multi-Gang
  *  Device Driver for Hubitat Elevation hub
  *
  *  Based on kkossev's driver Version 0.4.1, last updated 2023-02-10
