@@ -27,7 +27,7 @@ def version() { "1.0.0" }
 def timeStamp() { "2023/04/05 9:36 AM" }
 
 metadata {
-    definition (name: "Prakriti Smart ZigBee Wall Switch Multi-Gang", namespace: "prakritismart", author: "Prakriti Smart", importUrl: "https://raw.githubusercontent.com/prakritiSmart/SmartHome/main/Hubitat/Drivers%20Code/prakritismart-zigbee-multigang-switch.groovy", singleThreaded: true ) {
+    definition (name: "Prakriti Smart ZigBee Wall Switch Multi-Gang", namespace: "prakritismart", author: "Prakriti Smart", importUrl: "https://raw.githubusercontent.com/PrakritiSmart/SmartHome/main/Hubitat/Drivers%20Code/prakritismart-zigbee-multigang-switch.groovy", singleThreaded: true ) {
         capability "Initialize"
         capability "Actuator"
         capability "Configuration"
@@ -276,42 +276,13 @@ def setupChildDevices() {
     deleteObsoleteChildren()
     def buttons = 0
     switch (device.data.model) {
-        case 'SBM300Z6':
-            buttons = 6
-            break
         case 'TS011F':
-            if (device.data.manufacturer == '_TZ3000_zmy1waw6') {
-                buttons = 1
+            if (device.data.manufacturer == '_TZ3000_yf8iuzil') {
+                buttons = 2
                 break
             } else {
                 // continue below
             }
-        case 'TS0115':
-        case 'SBM300Z5':
-            buttons = 5
-            break
-        case 'TS0004':
-        case 'TS0014':
-        case 'SBM300Z4':
-            buttons = 4
-            break
-        case 'TS0003':
-        case 'TS0013':
-        case 'SBM300Z3':
-        case 'ISM300Z3':
-            buttons = 3
-            break
-        case 'TS0002':
-        case 'TS0012':
-        case 'SBM300Z2':
-        case 'SIN-4-2-20':
-        case 'SIN-4-2-20_PRO':
-            buttons = 2
-            break
-        case 'TS0011':
-        case 'TS0001':
-            buttons = 0
-            break
         default:
             break
     }
