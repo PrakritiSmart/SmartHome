@@ -6,7 +6,7 @@
  *
  *  https://github.com/kkossev/hubitat-muxa-fork/blob/master/drivers/zemismart-zigbee-multigang-switch.groovy
  *
- *  Ver. 0.0.1 2023-04-05 Prakriti Smart    - first version
+ *  Ver. 1.0.0 2023-04-05 Prakriti Smart    - first version
  *  
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -24,7 +24,10 @@ import hubitat.device.Protocol
 import groovy.transform.Field
  
 def version() { "1.0.0" }
-def timeStamp() { "2023/04/05 9:36 AM" }
+
+def timeStamp() { "2023/04/05 10:24 PM" }
+
+@Field static final Boolean debug = false
 
 metadata {
     definition (name: "Prakriti Smart ZigBee Wall Switch Multi-Gang", namespace: "prakritismart", author: "Prakriti Smart", importUrl: "https://raw.githubusercontent.com/PrakritiSmart/SmartHome/main/Hubitat/Drivers%20Code/prakritismart-zigbee-multigang-switch.groovy", singleThreaded: true ) {
@@ -34,20 +37,16 @@ metadata {
         capability "Switch"
         capability "Refresh"
         capability "Health Check"
-        
-        command "configure", [[name: "Configure the sensor after switching drivers"]]
-        command "initialize", [[name: "Initialize the sensor after switching drivers.  \n\r   ***** Will load device default values! *****" ]]
-        command "refresh",   [[name: "May work for some DC/mains powered sensors only"]] 
-        
-        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0004,0005,0006,0702,0B04,E000,E001", outClusters:"0019,000A", model:"TS002", manufacturer:"_TZ3000_yf8iuzil", deviceJoinName: "Prakriti Smart 2-gang black switch"
-        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0004,0005,0006,0702,0B04,E000,E001", outClusters:"0019,000A", model:"TS011F", manufacturer:"_TZ3000_yf8iuzil", deviceJoinName: "Prakriti Smart 2-gang white switch"
-        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0004,0005,0006,E000,E001", outClusters:"0019,000A", model:"TS001", manufacturer:"_TZ3000_mantufyr", deviceJoinName: "Prakriti Smart 1-gang switch"
+
+		fingerprint profileId: "0104", endpointId: "01", inClusters: "0003,0004,0005,0006,0702,0B04,E000,E001,0000", outClusters: "0019,000A", model: "TS002", manufacturer: "_TZ3000_yf8iuzil", deviceJoinName: "Prakriti Smart 2-gang black switch"
+        fingerprint profileId: "0104", endpointId: "01", inClusters: "0003,0004,0005,0006,0702,0B04,E000,E001,0000", outClusters: "0019,000A", model: "TS011F", manufacturer: "_TZ3000_yf8iuzil", deviceJoinName: "Prakriti Smart 2-gang white switch"
+        fingerprint profileId: "0104", endpointId: "01", inClusters:"0003,0004,0005,0006,E000,E001,0000", outClusters:"0019,000A", model: "TS001", manufacturer: "_TZ3000_mantufyr", deviceJoinName: "Prakriti Smart 1-gang switch"
     }
     
-    preferences {
-
-            input (name: "logEnable", type: "bool", title: "Debug logging", description: "<i>Debug information, useful for troubleshooting. Recommended value is <b>false</b></i>", defaultValue: true)
-            input (name: "txtEnable", type: "bool", title: "Description text logging", description: "<i>Display sensor states in HE log page. Recommended value is <b>true</b></i>", defaultValue: true)		
+preferences {
+        input(name: "logEnable", type: "bool", title: "Enable debug logging", defaultValue: true)
+        input(name: "txtEnable", type: "bool", title: "Enable description text logging", defaultValue: true)
+        input(title: "IMPORTANT", description: "<b>In order to operate normally, please Initialise the device after changing to this driver!</b>", type: "paragraph", element: "paragraph")
     }
 }
 
@@ -73,6 +72,7 @@ def parse(String description) {
         parseAttributes(descMap)
         return
     }
+    
     else if (descMap?.clusterId == "0013" && descMap?.profileId != null && descMap?.profileId == "0000") {
         logInfo "device model ${device.data.model}, manufacturer ${device.data.manufacturer} <b>re-joined the network</b> (deviceNetworkId ${device.properties.deviceNetworkId}, zigbeeId ${device.properties.zigbeeId})"
     } else {
@@ -190,6 +190,7 @@ def parseBasicClusterAttribute(Map it) {
     }
 }
 
+
 def processOnOff(it, descMap) {
     // descMap.command =="0A" - switch toggled physically
     // descMap.command =="01" - get switch status
@@ -279,20 +280,25 @@ def setupChildDevices() {
     def buttons = 0
     switch (device.data.model) {
         case 'TS011F':
-            if (device.data.manufacturer == '_TZ3000_yf8iuzil') {
+            if (device.data.manufacturer == '_TZ3000_zmy1waw6') {
+                buttons = 1
+                break
+            } else if (device.data.manufacturer == '_TZ3000_yf8iuzil') {
                 buttons = 2
                 break
+			} else {
+                // continue below
             }
         case 'TS0002':
             if (device.data.manufacturer == '_TZ3000_yf8iuzil') {
                 buttons = 2
                 break
-            }
+            } else {
+				// continue below
+			}
         case 'TS0001':
-            if (device.data.manufacturer == '_TZ3000_mantufyr') {
-                buttons = 1
-                break
-            }
+            buttons = 0
+            break
         default:
             break
     }
@@ -366,6 +372,12 @@ def updated() {
     logDebug "Parent updated"
 }
 
+def tuyaBlackMagic() {
+    List<String> cmds = []
+    cmds += zigbee.readAttribute(0x0000, [0x0004, 0x0000, 0x0001, 0x0005, 0x0007, 0xfffe], [:], delay = 200)
+    cmds += zigbee.writeAttribute(0x0000, 0xffde, 0x20, 0x0d, [destEndpoint: 0x01], delay = 50)
+    return cmds
+}
 
 def configure() {
     logDebug " configure().."
@@ -373,10 +385,10 @@ def configure() {
     if (device.data.manufacturer in ["_TZ3000_cfnprab5", "_TZ3000_okaz9tjs"]) {
         log.warn "this device ${device.data.manufacturer} is known to NOT work with HE!"
     }
+    cmds += tuyaBlackMagic()
+    cmds += zigbee.onOffConfig()
+    cmds += zigbee.onOffRefresh()
     
-	//cmds += refresh()
-	cmds += zigbee.onOffConfig()
-	cmds += zigbee.onOffRefresh()
     sendZigbeeCommands(cmds)
 }
 
@@ -394,50 +406,6 @@ def logDebug(msg) {
 def logInfo(msg) {
     String sDnMsg = device?.displayName + " " + msg
     if (settings?.txtEnable) log.info sDnMsg
-}
-
-def powerOnState(relayMode) {
-    List<String> cmds = []
-    int modeEnum = 99
-    switch (relayMode) {
-        case "OFF":
-            modeEnum = 0
-            break
-        case "ON":
-            modeEnum = 1
-            break
-        case "Last state":
-            modeEnum = 2
-            break
-        default:
-            log.error "${device.displayName} please select a Power On State option"
-            return
-    }
-    logDebug("setting  Power On State option to: ${relayMode}  (${modeEnum}")
-    cmds += zigbee.writeAttribute(0x0006, 0x8002, DataType.ENUM8, modeEnum)
-    sendZigbeeCommands(cmds)
-}
-
-def switchType(type) {
-    List<String> cmds = []
-    int modeEnum = 99
-    switch (type) {
-        case "toggle":
-            modeEnum = 0
-            break
-        case "state":
-            modeEnum = 1
-            break
-        case "momentary":
-            modeEnum = 2
-            break
-        default:
-            log.error "${device.displayName} please select a Switch Type"
-            return
-    }
-    logDebug("setting  Switch Type to: ${type} (${modeEnum})")
-    cmds += zigbee.writeAttribute(0xE001, 0xD030, DataType.ENUM8, modeEnum)
-    sendZigbeeCommands(cmds)
 }
 
 def processOnOfClusterOtherAttr(Map it) {
@@ -463,6 +431,10 @@ def processOnOfClusterOtherAttr(Map it) {
             attrName = "Child Lock"
             mode = value == 0 ? "off" : "on"
             break
+        case "0006_8001":
+            attrName = "LED mode"
+            mode = value == 0 ? "Disabled" : value == 1 ? "Lit when On" : value == 2 ? "Lit when Off" : null
+            break
         case "0006_8002":
             attrName = "Power On State"
             mode = value == 0 ? "off" : value == 1 ? "on" : value == 2 ? "Last state" : null
@@ -483,3 +455,4 @@ def processOnOfClusterOtherAttr(Map it) {
     }
     if (txtEnable) log.info "${device.displayName} ${attrName} is: ${mode} (${value})"
 }
+
