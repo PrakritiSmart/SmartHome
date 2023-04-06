@@ -39,7 +39,8 @@ metadata {
         command "initialize", [[name: "Initialize the sensor after switching drivers.  \n\r   ***** Will load device default values! *****" ]]
         command "refresh",   [[name: "May work for some DC/mains powered sensors only"]] 
         
-        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0004,0005,0006,0702,0B04,E000,E001", outClusters:"0019,000A", model:"TS011F", manufacturer:"_TZ3000_yf8iuzil", deviceJoinName: "Prakriti Smart multi-gang switch"
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0004,0005,0006,0702,0B04,E000,E001", outClusters:"0019,000A", model:"TS002", manufacturer:"_TZ3000_yf8iuzil", deviceJoinName: "Prakriti Smart 2-gang black switch"
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0004,0005,0006,0702,0B04,E000,E001", outClusters:"0019,000A", model:"TS011F", manufacturer:"_TZ3000_yf8iuzil", deviceJoinName: "Prakriti Smart 2-gang white switch"
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0004,0005,0006,E000,E001", outClusters:"0019,000A", model:"TS001", manufacturer:"_TZ3000_mantufyr", deviceJoinName: "Prakriti Smart 1-gang switch"
     }
     
@@ -282,6 +283,11 @@ def setupChildDevices() {
                 buttons = 2
                 break
             }
+        case 'TS0002':
+            if (device.data.manufacturer == '_TZ3000_yf8iuzil') {
+                buttons = 2
+                break
+            }
         case 'TS0001':
             if (device.data.manufacturer == '_TZ3000_mantufyr') {
                 buttons = 1
@@ -368,18 +374,9 @@ def configure() {
         log.warn "this device ${device.data.manufacturer} is known to NOT work with HE!"
     }
     
-    if (noBindingButPolling()) {
-        //these  will send out device anounce message at ervery 2 mins as heart beat, setting 0x0099 to 1 will disable it.
-        cmds += zigbee.writeAttribute(zigbee.BASIC_CLUSTER, 0x0099, 0x20, 0x01, [mfgCode: 0x0000])
-        // Hack : Need to disable reporting for thoses devices, else It will enable a auto power off after 2mn.     // see https://github.com/dresden-elektronik/deconz-rest-plugin/issues/3693
-        // https://github.com/Mariano-Github/Edge-Drivers-Beta/blob/652bcfbcf7b8ab8a14557e097b740216760f2b02/zigbee-multi-switch-v4-childs/src/init.lua 
-        log.warn "disabling ${device.data.manufacturer} device announce message every 2 mins and skipping reporting configuiration!"
-        cmds += zigbee.onOffRefresh()
-    } else {
-        //cmds += refresh()
-        cmds += zigbee.onOffConfig()
-        cmds += zigbee.onOffRefresh()
-    }
+	//cmds += refresh()
+	cmds += zigbee.onOffConfig()
+	cmds += zigbee.onOffRefresh()
     sendZigbeeCommands(cmds)
 }
 
