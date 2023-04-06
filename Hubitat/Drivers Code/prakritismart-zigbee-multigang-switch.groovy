@@ -40,6 +40,7 @@ metadata {
         command "refresh",   [[name: "May work for some DC/mains powered sensors only"]] 
         
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0004,0005,0006,0702,0B04,E000,E001", outClusters:"0019,000A", model:"TS011F", manufacturer:"_TZ3000_yf8iuzil", deviceJoinName: "Prakriti Smart multi-gang switch"
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0004,0005,0006,E000,E001", outClusters:"0019,000A", model:"TS001", manufacturer:"_TZ3000_mantufyr", deviceJoinName: "Prakriti Smart 1-gang switch"
     }
     
     preferences {
@@ -280,8 +281,11 @@ def setupChildDevices() {
             if (device.data.manufacturer == '_TZ3000_yf8iuzil') {
                 buttons = 2
                 break
-            } else {
-                // continue below
+            }
+        case 'TS0001':
+            if (device.data.manufacturer == '_TZ3000_mantufyr') {
+                buttons = 1
+                break
             }
         default:
             break
