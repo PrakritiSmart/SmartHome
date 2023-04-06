@@ -46,7 +46,7 @@ metadata {
 preferences {
         input(name: "logEnable", type: "bool", title: "Enable debug logging", defaultValue: true)
         input(name: "txtEnable", type: "bool", title: "Enable description text logging", defaultValue: true)
-        input(title: "IMPORTANT", description: "<b>In order to operate normally, please Initialise the device after changing to this driver!</b>", type: "paragraph", element: "paragraph")
+        input(title: "IMPORTANT", description: "<b>In order to operate normally, please initialize the device after changing to this driver!</b>", type: "paragraph", element: "paragraph")
     }
 }
 
