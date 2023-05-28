@@ -284,10 +284,10 @@ def setupChildDevices() {
             if (device.data.manufacturer == '_TZ3000_zmy1waw6') {
                 buttons = 1
                 break
-            } else if (device.data.manufacturer == '_TZ3000_yf8iuzil') {
+            } else if (device.data.manufacturer == '_TZ3000_yf8iuzil' or device.data.manufacturer == '_TZ3000_k6fvknrr') ){
                 buttons = 2
                 break
-			} else {
+	    } else {
                 // continue below
             }
         case 'TS0002':
