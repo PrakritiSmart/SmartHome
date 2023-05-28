@@ -31,7 +31,7 @@ def timeStamp() { "2023/05/20 2:24 PM" }
 @Field static final Boolean debug = false
 
 metadata {
-    definition (name: "Prakriti Smart ZigBee Wall Multi Switches and Outlets", namespace: "prakritismart", author: "Prakriti Smart", importUrl: "https://raw.githubusercontent.com/PrakritiSmart/SmartHome/main/Hubitat/Drivers%20Code/prakritismart-zigbee-multigang-switch.groovy", singleThreaded: true ) {
+    definition (name: "Prakriti Smart ZigBee Wall Multi Switches and Outlets", namespace: "prakritismart", author: "Prakriti Smart", importUrl: "https://github.com/PrakritiSmart/SmartHome/blob/main/Hubitat/Drivers%20Code/prakritismart-zigbee-multi-switches-outlets.groovy", singleThreaded: true ) {
         capability "Initialize"
         capability "Actuator"
         capability "Configuration"
