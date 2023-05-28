@@ -40,7 +40,8 @@ metadata {
 
         fingerprint profileId: "0104", endpointId: "01", inClusters: "0003,0004,0005,0006,0702,0B04,E000,E001,0000", outClusters: "0019,000A", model: "TS002", manufacturer: "_TZ3000_yf8iuzil", deviceJoinName: "Prakriti Smart 2-gang black switch"
         fingerprint profileId: "0104", endpointId: "01", inClusters: "0003,0004,0005,0006,0702,0B04,E000,E001,0000", outClusters: "0019,000A", model: "TS011F", manufacturer: "_TZ3000_yf8iuzil", deviceJoinName: "Prakriti Smart 2-gang white switch"
-        fingerprint profileId: "0104", endpointId: "01", inClusters:"0003,0004,0005,0006,E000,E001,0000", outClusters:"0019,000A", model: "TS001", manufacturer: "_TZ3000_mantufyr", deviceJoinName: "Prakriti Smart 1-gang switch"
+        fingerprint profileId: "0104", endpointId: "01", inClusters: "0003,0004,0005,0006,E000,E001,0000", outClusters:"0019,000A", model: "TS001", manufacturer: "_TZ3000_mantufyr", deviceJoinName: "Prakriti Smart 1-gang switch"
+        fingerprint profileId: "0104", endpointId: "01", inClusters: "0003,0004,0005,0006,E000,0000", outClusters:"000A", model: "TS011F", manufacturer: "_TZ3000_k6fvknrr", deviceJoinName: "Prakriti Smart multi wall outlet"
     }
     
 preferences {
