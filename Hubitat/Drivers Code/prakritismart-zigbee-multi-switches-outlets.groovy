@@ -7,6 +7,7 @@
  *  https://github.com/kkossev/hubitat-muxa-fork/blob/master/drivers/zemismart-zigbee-multigang-switch.groovy
  *
  *  Ver. 1.0.0 2023-04-05 Prakriti Smart    - first version
+ *  Ver. 1.0.1 2023-05-20 Prakriti Smart    - added zigbee outlet
  *  
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -23,9 +24,9 @@ import hubitat.device.HubAction
 import hubitat.device.Protocol
 import groovy.transform.Field
  
-def version() { "1.0.0" }
+def version() { "1.0.1" }
 
-def timeStamp() { "2023/04/05 10:24 PM" }
+def timeStamp() { "2023/05/20 2:24 PM" }
 
 @Field static final Boolean debug = false
 
@@ -38,10 +39,10 @@ metadata {
         capability "Refresh"
         capability "Health Check"
 
-        fingerprint profileId: "0104", endpointId: "01", inClusters: "0003,0004,0005,0006,0702,0B04,E000,E001,0000", outClusters: "0019,000A", model: "TS002", manufacturer: "_TZ3000_yf8iuzil", deviceJoinName: "Prakriti Smart 2-gang black switch"
-        fingerprint profileId: "0104", endpointId: "01", inClusters: "0003,0004,0005,0006,0702,0B04,E000,E001,0000", outClusters: "0019,000A", model: "TS011F", manufacturer: "_TZ3000_yf8iuzil", deviceJoinName: "Prakriti Smart 2-gang white switch"
-        fingerprint profileId: "0104", endpointId: "01", inClusters: "0003,0004,0005,0006,E000,E001,0000", outClusters:"0019,000A", model: "TS001", manufacturer: "_TZ3000_mantufyr", deviceJoinName: "Prakriti Smart 1-gang switch"
-        fingerprint profileId: "0104", endpointId: "01", inClusters: "0003,0004,0005,0006,E000,0000", outClusters:"000A", model: "TS011F", manufacturer: "_TZ3000_k6fvknrr", deviceJoinName: "Prakriti Smart multi wall outlet"
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0003,0004,0005,0006,0702,0B04,E000,E001,0000", outClusters:"0019,000A", model:"TS002", manufacturer:"_TZ3000_yf8iuzil", deviceJoinName:"Prakriti Smart 2-gang black switch"
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0003,0004,0005,0006,0702,0B04,E000,E001,0000", outClusters:"0019,000A", model:"TS011F", manufacturer:"_TZ3000_yf8iuzil", deviceJoinName:"Prakriti Smart 2-gang white switch"
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0003,0004,0005,0006,E000,E001,0000", outClusters:"0019,000A", model:"TS001", manufacturer:"_TZ3000_mantufyr", deviceJoinName:"Prakriti Smart 1-gang switch"
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0004,0005,0006,E000", outClusters:"000A", model:"TS011F", manufacturer:"_TZ3000_k6fvknrr", deviceJoinName:"Prakriti Smart multi wall outlet"
     }
     
 preferences {
@@ -287,7 +288,7 @@ def setupChildDevices() {
             } else if (device.data.manufacturer in ['_TZ3000_yf8iuzil', '_TZ3000_k6fvknrr'] ){
                 buttons = 2
                 break
-	    } else {
+			} else {
                 // continue below
             }
         case 'TS0002':
