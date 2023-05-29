@@ -8,7 +8,8 @@
  *
  *  Ver. 1.0.0 2023-04-05 Prakriti Smart    - first version
  *  Ver. 1.0.1 2023-05-20 Prakriti Smart    - added zigbee outlet
- *  
+ *  Ver. 1.0.2 2023-05-28 Prakriti Smart    - added zigbee power strip
+ *
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *  in compliance with the License. You may obtain a copy of the License at:
@@ -24,14 +25,14 @@ import hubitat.device.HubAction
 import hubitat.device.Protocol
 import groovy.transform.Field
  
-def version() { "1.0.1" }
+def version() { "1.0.2" }
 
-def timeStamp() { "2023/05/20 2:24 PM" }
+def timeStamp() { "2023/05/28 08:57 PM" }
 
 @Field static final Boolean debug = false
 
 metadata {
-    definition (name: "Prakriti Smart ZigBee Wall Multi Switches and Outlets", namespace: "prakritismart", author: "Prakriti Smart", importUrl: "https://github.com/PrakritiSmart/SmartHome/blob/main/Hubitat/Drivers%20Code/prakritismart-zigbee-multi-switches-outlets.groovy", singleThreaded: true ) {
+    definition (name: "Prakriti Smart ZigBee Wall Multi Switches and Outlets", namespace: "prakritismart", author: "Prakriti Smart", importUrl: "https://raw.githubusercontent.com/PrakritiSmart/SmartHome/main/Hubitat/Drivers%20Code/prakritismart-zigbee-multigang-switch.groovy", singleThreaded: true ) {
         capability "Initialize"
         capability "Actuator"
         capability "Configuration"
@@ -43,6 +44,8 @@ metadata {
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0003,0004,0005,0006,0702,0B04,E000,E001,0000", outClusters:"0019,000A", model:"TS011F", manufacturer:"_TZ3000_yf8iuzil", deviceJoinName:"Prakriti Smart 2-gang white switch"
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0003,0004,0005,0006,E000,E001,0000", outClusters:"0019,000A", model:"TS001", manufacturer:"_TZ3000_mantufyr", deviceJoinName:"Prakriti Smart 1-gang switch"
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0004,0005,0006,E000", outClusters:"000A", model:"TS011F", manufacturer:"_TZ3000_k6fvknrr", deviceJoinName:"Prakriti Smart multi wall outlet"
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0004,0005,0006,E000", outClusters:"000A", model:"TS011F", manufacturer:"_TZ3000_cfnprab5", deviceJoinName:"Prakriti Smart Power strip"
+        
     }
     
 preferences {
@@ -287,6 +290,9 @@ def setupChildDevices() {
                 break
             } else if (device.data.manufacturer in ['_TZ3000_yf8iuzil', '_TZ3000_k6fvknrr'] ){
                 buttons = 2
+                break
+			} else if (device.data.manufacturer == '_TZ3000_cfnprab5'){
+                buttons = 5
                 break
 			} else {
                 // continue below
